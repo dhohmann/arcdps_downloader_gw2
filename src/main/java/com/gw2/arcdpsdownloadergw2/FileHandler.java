@@ -26,11 +26,30 @@ public class FileHandler {
         }
     }
 
+    public void downloadIfNeeded(){
+        System.out.println("Checking for new updates...");
+        if(downloader.checkUpdateAvailable()){
+            System.out.println("Found update. Starting download...");
+            download();
+        } else {
+            System.out.println("No update available.");
+        }
+
+    }
+
     public void download() {
         if (this.downloader.downloadFile()) {
             System.out.println("Download successful");
         } else {
             System.out.println("Error in downloading");
         }
+    }
+
+    public static File getGW2Location() {
+        File folder = new File("C:/Program Files/Guild Wars 2/");
+        if(folder.exists() && new File(folder, "Gw2-64.exe").exists()){
+            return folder;
+        }
+        return null;
     }
 }

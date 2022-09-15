@@ -5,6 +5,8 @@
 
 package com.gw2.arcdpsdownloadergw2;
 
+import java.io.IOException;
+
 /**
  *
  * @author Jani Eriksson <https://github.com/jani-e>
@@ -12,10 +14,17 @@ package com.gw2.arcdpsdownloadergw2;
 public class ArcdpsDownloaderGW2 {
 
     public static void main(String[] args) {
-        UI ui = new UI();
-        System.out.println("Starting");
+        try {
+            if(!Configuration.getConfigFile().exists()){
+                Configuration.save(Configuration.get());
+            }
+        } catch (IOException e) {
+            System.out.println("Could not load or create configuration: " + e.toString());
+        }
+
+        UI ui = new UI("ArcDPSDownloader");
         ui.start();
-        System.out.println("Closing");
+        
     }
-    
+
 }
