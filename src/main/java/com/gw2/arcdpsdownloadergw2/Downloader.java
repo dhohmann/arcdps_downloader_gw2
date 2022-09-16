@@ -22,7 +22,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * Downloader for ArcDPS.
+ * 
  * @author Jani Eriksson <https://github.com/jani-e>
  */
 public class Downloader {
@@ -33,7 +34,7 @@ public class Downloader {
     public Downloader() {
         try {
             this.url = new URL("https://www.deltaconnected.com/arcdps/x64/d3d11.dll");
-            switch (Configuration.get().getDirectXVersion()) {
+            switch (ArcdpsDownloaderGW2.getConfig().getDirectXVersion()) {
                 case 9:
                     this.filePath = "C:/Program Files/Guild Wars 2/bin64/d3d9.dll";
                     break;
@@ -50,7 +51,7 @@ public class Downloader {
     public boolean downloadFile() {
         try {
             System.out.println(String.format("Using DirectX%d version. If needed, change it in configuration.",
-                    Configuration.get().getDirectXVersion()));
+                    ArcdpsDownloaderGW2.getConfig().getDirectXVersion()));
 
             InputStream inputStream = this.url.openStream();
             Files.copy(inputStream, Paths.get(this.filePath), StandardCopyOption.REPLACE_EXISTING);
@@ -61,10 +62,14 @@ public class Downloader {
         return false;
     }
 
-    public static Date getLastModification() {
+    /**
+     * Calculates the last modification date of ArcDPS.
+     * 
+     * @return {@code null}, if the date could not be retrieved, the date otherwise.
+     */
+    public Date getLastModification() {
         try {
             StringBuilder output = new StringBuilder();
-            URL url = new URL("https://www.deltaconnected.com/arcdps/x64/");
             InputStreamReader reader = new InputStreamReader(url.openStream());
             char[] buffer = new char[256];
             int length = -1;
@@ -86,6 +91,11 @@ public class Downloader {
         return null;
     }
 
+    /**
+     * Checks, if an update of ArcDPS is available.
+     * 
+     * @return {@code true}, if an update is found.
+     */
     public boolean checkUpdateAvailable() {
         Date currentVersion = null;
         File file = new File(filePath);

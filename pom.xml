@@ -11,6 +11,12 @@
         <exec.mainClass>com.gw2.arcdpsdownloadergw2.ArcdpsDownloaderGW2</exec.mainClass>
     </properties>
     <build>
+        <resources>
+            <resource>
+              <directory>src/main/resources</directory>
+              <filtering>true</filtering>
+            </resource>
+          </resources>
         <plugins>
             <plugin> 
                 <groupId>org.apache.maven.plugins</groupId>
