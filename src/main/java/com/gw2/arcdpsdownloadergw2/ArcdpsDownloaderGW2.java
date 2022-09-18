@@ -36,7 +36,7 @@ public class ArcdpsDownloaderGW2 {
             Window window = new Window();
             window.show();
         } else {
-            Console console = new Console();
+            Console console = new Console(args);
             console.start();
         }
 

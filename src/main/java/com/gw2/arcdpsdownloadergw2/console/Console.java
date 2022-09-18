@@ -14,13 +14,47 @@ public class Console {
 
     private Scanner scanner;
     private FileHandler fileHandler;
+    private String[] args;
 
     public Console() {
-        scanner = new Scanner(System.in);
-        fileHandler = ArcdpsDownloaderGW2.getFileHandler();
+        this(new String[] {});
+    }
+
+    public Console(String[] args) {
+        this.scanner = new Scanner(System.in);
+        this.fileHandler = ArcdpsDownloaderGW2.getFileHandler();
+        this.args = args;
     }
 
     public void start() {
+        if (args.length == 0) {
+            runInteractive();
+            return;
+        }
+        if (checkOption("download")) {
+            this.fileHandler.download();
+            return;
+        }
+        if (checkOption("remove")) {
+            this.fileHandler.removeFile();
+            return;
+        }
+        System.out.println(
+                "Unknown option! \nOptions: \n\tdownload: Downloads the latest Arcdps\n\tremove: Removes Arcdps");
+    }
+
+    private boolean checkOption(String option) {
+        if (option != null) {
+            for (String string : args) {
+                if (string.toLowerCase().equals(option.toLowerCase())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void runInteractive() {
         while (true) {
             System.out.println("\n--------\nOptions\n--------");
             System.out.println("1 - Download latest Arcdps");
