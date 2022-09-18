@@ -32,7 +32,7 @@ public class ArcdpsDownloaderGW2 {
     }
 
     public static void main(String[] args) {
-        if (args.length > 0 && "ui".equalsIgnoreCase(args[0])) {
+        if (System.console() == null) {
             Window window = new Window();
             window.show();
         } else {
