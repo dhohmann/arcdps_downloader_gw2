@@ -18,6 +18,8 @@ public class Configuration {
     private static final String FALLBACK_CONFIG_FOLDER_NAME = "arcdpsdownloadergw2";
 
     private static final String PROPERTY_DIRECTX_VERSION = "directx.version";
+    private static final String PROPERTY_GW2_AUTOSTART = "gw2.autostart";
+    private static final String PROPERTY_GW2_DIRECTORY = "gw2.directory";
 
     private final Properties properties;
 
@@ -93,5 +95,25 @@ public class Configuration {
         StringBuilder result = new StringBuilder();
         result.append(PROPERTY_DIRECTX_VERSION).append(": ").append(properties.getProperty(PROPERTY_DIRECTX_VERSION));
         return result.toString();
+    }
+
+    public boolean getAutostart() {
+        return Boolean.parseBoolean(properties.getProperty(PROPERTY_GW2_AUTOSTART));
+    }
+
+    public String getGW2Path(){
+        return properties.getProperty(PROPERTY_GW2_DIRECTORY);
+    }
+
+    public void setGW2Path(String text) {
+        properties.setProperty(PROPERTY_GW2_DIRECTORY, text);
+    }
+
+    public void setDirectXVersion(int selectedItem) {
+        properties.setProperty(PROPERTY_DIRECTX_VERSION, Integer.toString(selectedItem));
+    }
+
+    public void setAutostart(boolean selected) {
+        properties.setProperty(PROPERTY_GW2_AUTOSTART, Boolean.toString(selected));
     }
 }

@@ -6,7 +6,9 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.io.File;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -18,6 +20,7 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
 import com.gw2.arcdpsdownloadergw2.ArcdpsDownloaderGW2;
+import com.gw2.arcdpsdownloadergw2.Configuration;
 import com.gw2.arcdpsdownloadergw2.Utils;
 
 /**
@@ -26,6 +29,10 @@ import com.gw2.arcdpsdownloadergw2.Utils;
 public class Settings extends JDialog {
 
     public static final int PADDING_INNER = 15;
+
+    private DefaultComboBoxModel<Integer> directXModel = new DefaultComboBoxModel<>(new Integer[] { 9, 11 });
+    private JTextField gamePathValue = null;
+    private JCheckBox autostartCheckbox;
 
     public Settings(JFrame parent, boolean modal) {
         super(parent, "Settings", modal);
@@ -52,7 +59,7 @@ public class Settings extends JDialog {
         layout.putConstraint(SpringLayout.NORTH, directXLabel, 15, SpringLayout.SOUTH, title);
         content.add(directXLabel);
 
-        JComboBox<Integer> directXSelect = new JComboBox<>(new Integer[] { 9, 11 });
+        JComboBox<Integer> directXSelect = new JComboBox<>();
         layout.putConstraint(SpringLayout.WEST, directXSelect, 5, SpringLayout.EAST, directXLabel);
         layout.putConstraint(SpringLayout.VERTICAL_CENTER, directXSelect, 0, SpringLayout.VERTICAL_CENTER,
                 directXLabel);
@@ -60,7 +67,8 @@ public class Settings extends JDialog {
                 content);
         content.add(directXSelect);
 
-        directXSelect.setSelectedItem(ArcdpsDownloaderGW2.getConfig().getDirectXVersion());
+        directXSelect.setModel(directXModel);
+        directXModel.setSelectedItem(ArcdpsDownloaderGW2.getConfig().getDirectXVersion());
 
         JLabel gamePathLabel = new JLabel("Game directory");
         layout.putConstraint(SpringLayout.WEST, gamePathLabel, PADDING_INNER, SpringLayout.WEST, content);
@@ -68,7 +76,8 @@ public class Settings extends JDialog {
         content.add(gamePathLabel);
 
         JPanel gamePathSelection = new JPanel(new BorderLayout());
-        JTextField gamePathValue = new JTextField(50);
+        gamePathValue = new JTextField(50);
+
         if (Utils.getGW2Location() != null) {
             gamePathValue.setText(Utils.getGW2Location().getAbsolutePath());
         }
@@ -94,8 +103,26 @@ public class Settings extends JDialog {
         layout.putConstraint(SpringLayout.EAST, gamePathSelection, -PADDING_INNER, SpringLayout.EAST, content);
         content.add(gamePathSelection);
 
+        JLabel autostartLabel = new JLabel("Autostart GW2");
+        autostartLabel.setToolTipText("Starts GW2 automatically after the update process");
+
+        layout.putConstraint(SpringLayout.WEST, autostartLabel, PADDING_INNER, SpringLayout.WEST, content);
+        layout.putConstraint(SpringLayout.NORTH, autostartLabel, 15, SpringLayout.SOUTH, gamePathLabel);
+        content.add(autostartLabel);
+
+        autostartCheckbox = new JCheckBox("Autostart");
+        autostartCheckbox.setSelected(ArcdpsDownloaderGW2.getConfig().getAutostart());
+        layout.putConstraint(SpringLayout.WEST, autostartCheckbox, 5, SpringLayout.EAST, autostartLabel);
+        layout.putConstraint(SpringLayout.VERTICAL_CENTER, autostartCheckbox, 0, SpringLayout.VERTICAL_CENTER,
+                autostartLabel);
+        layout.putConstraint(SpringLayout.EAST, autostartCheckbox, -PADDING_INNER, SpringLayout.EAST,
+                content);
+        content.add(autostartCheckbox);
+
         JButton accept = new JButton("Save");
+        accept.addActionListener((e) -> this.onSave());
         JButton cancel = new JButton("Cancel");
+        cancel.addActionListener((e) -> this.close());
         JPanel confirmButtons = new JPanel(new GridLayout(1, 2));
         layout.putConstraint(SpringLayout.WEST, confirmButtons, PADDING_INNER, SpringLayout.WEST, content);
         layout.putConstraint(SpringLayout.EAST, confirmButtons, -PADDING_INNER, SpringLayout.EAST, content);
@@ -103,10 +130,38 @@ public class Settings extends JDialog {
 
         confirmButtons.add(accept, BorderLayout.WEST);
         confirmButtons.add(cancel, BorderLayout.EAST);
-
         content.add(confirmButtons);
 
         this.add(new JScrollPane(content));
+    }
+
+    public void onSave() {
+        Configuration config = ArcdpsDownloaderGW2.getConfig();
+        if (gamePathValue.getText() != null && !gamePathValue.getText().isEmpty()) {
+            config.setGW2Path(gamePathValue.getText());
+        } else {
+            return;
+        }
+        config.setDirectXVersion((Integer) directXModel.getSelectedItem());
+        config.setAutostart(autostartCheckbox.isSelected());
+        config.save();
+
+        close();
+    }
+
+    private void close() {
+        this.setVisible(false);
+        this.dispose();
+
+        this.autostartCheckbox = null;
+        this.directXModel = null;
+        this.gamePathValue = null;
+    }
+
+    public static void main(String[] args) {
+        Settings s = new Settings(null, false);
+        s.setDefaultCloseOperation(Settings.DISPOSE_ON_CLOSE);
+        s.setVisible(true);
     }
 
 }

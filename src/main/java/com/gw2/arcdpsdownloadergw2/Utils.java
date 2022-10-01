@@ -14,7 +14,7 @@ public class Utils {
      * @implNote Is not dynamic right now.
      */
     public static File getGW2Location() {
-        File folder = new File("C:/Program Files/Guild Wars 2/");
+        File folder = new File(ArcdpsDownloaderGW2.getConfig().getGW2Path());
         if (folder.exists() && new File(folder, "Gw2-64.exe").exists()) {
             return folder;
         }
