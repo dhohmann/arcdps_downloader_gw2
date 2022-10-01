@@ -6,7 +6,7 @@ Java 8+
 Guild Wars 2
 
 ## Changelog
-More information [here](Changelog.md)
+More information [here](CHANGELOG.md)
 
 # Installation
 1. Install Java if not already installed. [https://www.java.com/](https://www.java.com/)
