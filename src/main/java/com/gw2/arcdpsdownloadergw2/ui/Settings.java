@@ -14,10 +14,12 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
+import javax.swing.filechooser.FileFilter;
 
 import com.gw2.arcdpsdownloadergw2.ArcdpsDownloaderGW2;
 import com.gw2.arcdpsdownloadergw2.Configuration;
@@ -55,6 +57,7 @@ public class Settings extends JDialog {
         content.add(title);
 
         JLabel directXLabel = new JLabel("DirectX version");
+        directXLabel.setToolTipText("DirectX version your game runs on. To determine the version check under UI settings if the checkbox for 'legacy support' is enabled. If it is, you are using DirectX 9.");
         layout.putConstraint(SpringLayout.WEST, directXLabel, PADDING_INNER, SpringLayout.WEST, content);
         layout.putConstraint(SpringLayout.NORTH, directXLabel, 15, SpringLayout.SOUTH, title);
         content.add(directXLabel);
@@ -70,7 +73,8 @@ public class Settings extends JDialog {
         directXSelect.setModel(directXModel);
         directXModel.setSelectedItem(ArcdpsDownloaderGW2.getConfig().getDirectXVersion());
 
-        JLabel gamePathLabel = new JLabel("Game directory");
+        JLabel gamePathLabel = new JLabel("Game executable");
+        gamePathLabel.setToolTipText("Path to the executable for GW2");
         layout.putConstraint(SpringLayout.WEST, gamePathLabel, PADDING_INNER, SpringLayout.WEST, content);
         layout.putConstraint(SpringLayout.NORTH, gamePathLabel, 15, SpringLayout.SOUTH, directXLabel);
         content.add(gamePathLabel);
@@ -78,17 +82,30 @@ public class Settings extends JDialog {
         JPanel gamePathSelection = new JPanel(new BorderLayout());
         gamePathValue = new JTextField(50);
 
-        if (Utils.getGW2Location() != null) {
-            gamePathValue.setText(Utils.getGW2Location().getAbsolutePath());
+        if (Utils.getGW2Executable() != null) {
+            gamePathValue.setText(Utils.getGW2Executable().getAbsolutePath());
         }
 
         JButton gamePathOpen = new JButton("Open");
         gamePathOpen.addActionListener((e) -> {
             JFileChooser chooser = new JFileChooser();
-            if (gamePathValue.getText() != null && gamePathValue.getText().isEmpty()) {
-                chooser.setSelectedFile(new File(gamePathValue.getText()));
+            if (gamePathValue.getText() != null && !gamePathValue.getText().isEmpty()) {
+                chooser.setCurrentDirectory(new File(gamePathValue.getText()));
             }
-            chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            chooser.setFileFilter(new FileFilter() {
+
+                @Override
+                public boolean accept(File f) {
+                    return f.isDirectory() || f.getName().endsWith(".exe");
+                }
+
+                @Override
+                public String getDescription() {
+                    return "Application";
+                }
+
+            });
             int action = chooser.showOpenDialog(this);
             if (action == JFileChooser.APPROVE_OPTION) {
                 gamePathValue.setText(chooser.getSelectedFile().getAbsolutePath());
@@ -137,11 +154,17 @@ public class Settings extends JDialog {
 
     public void onSave() {
         Configuration config = ArcdpsDownloaderGW2.getConfig();
-        if (gamePathValue.getText() != null && !gamePathValue.getText().isEmpty()) {
-            config.setGW2Path(gamePathValue.getText());
-        } else {
+        if (gamePathValue.getText() == null || gamePathValue.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please select the GW2 executable", getTitle(),
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
+        File file = new File(gamePathValue.getText());
+        if (!Utils.isValidGW2Location(file)) {
+            JOptionPane.showMessageDialog(this, "Game path seems not valid", getTitle(), JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        config.setGW2Path(file.isDirectory() ? file.getAbsolutePath() : file.getParentFile().getAbsolutePath());
         config.setDirectXVersion((Integer) directXModel.getSelectedItem());
         config.setAutostart(autostartCheckbox.isSelected());
         config.save();

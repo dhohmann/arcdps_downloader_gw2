@@ -1,2 +1,0 @@
-TODO: Implement Settings UI
-TODO: Settings - Autostart checkbox

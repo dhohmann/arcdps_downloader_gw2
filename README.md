@@ -3,7 +3,7 @@ Small Java program to download latest Arcdps to Guild Wars 2
 
 
 ## Requirements
-Java 11+
+Java 8+
 
 ## Usage
 Download the file and use it to start the game.
@@ -20,3 +20,9 @@ Change according to the direct x version used by the game. (See under Settings >
 Allowed values: 
 - `9` for DirectX9
 - `11` for DirectX11
+
+### gw2.autostart
+Change this to `true` when you want to start the game automatically, `false` otherwise.
+
+### gw2.directory
+Change this according to the location of your GW2 installation. This path should point to the folder containing the executable.

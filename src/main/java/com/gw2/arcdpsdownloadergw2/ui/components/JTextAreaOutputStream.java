@@ -1,4 +1,4 @@
-package com.gw2.arcdpsdownloadergw2.ui;
+package com.gw2.arcdpsdownloadergw2.ui.components;
 
 import java.io.IOException;
 import java.io.OutputStream;

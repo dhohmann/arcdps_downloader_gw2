@@ -21,6 +21,9 @@ public class Configuration {
     private static final String PROPERTY_GW2_AUTOSTART = "gw2.autostart";
     private static final String PROPERTY_GW2_DIRECTORY = "gw2.directory";
 
+    public static final int DIRECTX9 = 9;
+    public static final int DIRECTX11 = 11;
+
     private final Properties properties;
 
     public Configuration() {
@@ -60,7 +63,7 @@ public class Configuration {
             }
         }
         for (Object e : defaults.keySet()) {
-            if(!properties.contains(e.toString())){
+            if(!properties.containsKey(e.toString())){
                 properties.setProperty(e.toString(), defaults.getProperty(e.toString()));
             }
         }

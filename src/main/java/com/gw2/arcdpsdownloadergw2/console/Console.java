@@ -2,7 +2,6 @@ package com.gw2.arcdpsdownloadergw2.console;
 
 import java.util.Scanner;
 
-import com.gw2.arcdpsdownloadergw2.ArcdpsDownloaderGW2;
 import com.gw2.arcdpsdownloadergw2.FileHandler;
 
 /**
@@ -22,7 +21,7 @@ public class Console {
 
     public Console(String[] args) {
         this.scanner = new Scanner(System.in);
-        this.fileHandler = ArcdpsDownloaderGW2.getFileHandler();
+        this.fileHandler = new FileHandler();
         this.args = args;
     }
 

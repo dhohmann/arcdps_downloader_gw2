@@ -10,14 +10,13 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
+import javax.swing.UIManager;
 
+import com.gw2.arcdpsdownloadergw2.ArcdpsDownloaderGW2;
 import com.gw2.arcdpsdownloadergw2.Utils;
-import com.gw2.arcdpsdownloadergw2.action.Action;
-import com.gw2.arcdpsdownloadergw2.action.Download;
-import com.gw2.arcdpsdownloadergw2.action.Install;
-import com.gw2.arcdpsdownloadergw2.action.StartGame;
-import com.gw2.arcdpsdownloadergw2.action.UninstallArcDPS;
+import com.gw2.arcdpsdownloadergw2.ui.components.JTextAreaOutputStream;
 
 /**
  * Main window for the UI-based program.
@@ -25,7 +24,6 @@ import com.gw2.arcdpsdownloadergw2.action.UninstallArcDPS;
 public class Window {
 
     private JFrame frame;
-    private JDialog settingsDialog;
     private JDialog aboutDialog;
 
     public Window() {
@@ -41,6 +39,7 @@ public class Window {
         output.setPreferredSize(new java.awt.Dimension(500, 200));
         output.setEditable(false);
         output.setEnabled(false);
+        output.setDisabledTextColor(Color.WHITE);
         output.setLineWrap(true);
         output.setBackground(Color.BLACK);
 
@@ -56,15 +55,15 @@ public class Window {
         JMenu actions = new JMenu("Actions");
         JMenuItem download = new JMenuItem("Download");
         download.setToolTipText("Downloads ArcDPS");
-        download.addActionListener((e) -> performAction(new Download()));
+        download.addActionListener((e) -> performAction("Download"));
         actions.add(download);
 
         JMenuItem startGame = new JMenuItem("Start GW2");
-        startGame.addActionListener((e) -> performAction(new StartGame()));
+        startGame.addActionListener((e) -> performAction("StartGame"));
         actions.add(startGame);
 
         JMenuItem uninstall = new JMenuItem("Uninstall ArcDPS");
-        uninstall.addActionListener((e) -> performAction(new UninstallArcDPS()));
+        uninstall.addActionListener((e) -> performAction("UninstallArcDPS"));
         actions.add(uninstall);
         fileMenu.add(actions);
 
@@ -81,6 +80,9 @@ public class Window {
         JMenu helpMenu = new JMenu("Help");
 
         JMenuItem troubleShoot = new JMenuItem("Troubleshoot");
+        troubleShoot.addActionListener((e)->{
+            JOptionPane.showMessageDialog(frame, "Not implemented");
+        });
         helpMenu.add(troubleShoot);
 
         JMenuItem about = new JMenuItem("About");
@@ -92,10 +94,7 @@ public class Window {
     }
 
     public void showSettings() {
-        if (settingsDialog == null) {
-            settingsDialog = new Settings(frame, true);
-        }
-        settingsDialog.setVisible(true);
+        new Settings(frame, true).setVisible(true);
     }
 
     public void showAbout() {
@@ -108,10 +107,8 @@ public class Window {
     public void show() {
         frame.setVisible(true);
 
-        if (Utils.getGW2Location() != null) {
-            performAction(new Install());
-            performAction(new Download());
-            performAction(new StartGame());
+        if (Utils.getGW2Executable() != null) {
+            ArcdpsDownloaderGW2.getActionManager().execute("Install", "Download", "StartGame");
         } else {
             System.out.println("Please open settings to specify game directory.");
         }
@@ -120,20 +117,24 @@ public class Window {
 
     public void close() {
         frame.dispose();
-        settingsDialog.dispose();
-        aboutDialog.dispose();
+        if (aboutDialog != null) {
+            aboutDialog.dispose();
+        }
 
         frame = null;
-        settingsDialog = null;
         aboutDialog = null;
     }
 
-    private void performAction(Action action) {
-        action.execute();
+    private void performAction(String action) {
+        ArcdpsDownloaderGW2.getActionManager().execute(action);
     }
 
-
     public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         new Window().show();
     }
 }

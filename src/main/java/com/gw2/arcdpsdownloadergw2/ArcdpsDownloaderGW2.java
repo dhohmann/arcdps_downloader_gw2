@@ -5,11 +5,9 @@
 
 package com.gw2.arcdpsdownloadergw2;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import javax.swing.UIManager;
 
-import com.gw2.arcdpsdownloadergw2.console.Console;
+import com.gw2.arcdpsdownloadergw2.action.ActionManager;
 import com.gw2.arcdpsdownloadergw2.ui.Window;
 
 /**
@@ -20,49 +18,35 @@ import com.gw2.arcdpsdownloadergw2.ui.Window;
 public class ArcdpsDownloaderGW2 {
 
     private static Configuration configuration = new Configuration();
-    private static FileHandler fileHandler = new FileHandler();
-    private static String version = null;
+    private static ActionManager actionManager = new ActionManager();
 
+    /**
+     * Retrieves the configuration of the program.
+     * 
+     * @return Configuration
+     */
     public static Configuration getConfig() {
         return configuration;
     }
 
-    public static FileHandler getFileHandler() {
-        return fileHandler;
+    /**
+     * Retrieves the actionmanager of the program.
+     * 
+     * @return the actionManager
+     */
+    public static ActionManager getActionManager() {
+        return actionManager;
     }
 
     public static void main(String[] args) {
-        if (System.console() == null) {
-            Window window = new Window();
-            window.show();
-        } else {
-            Console console = new Console(args);
-            console.start();
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
+        Window window = new Window();
+        window.show();
 
-    }
-
-    public static String getVersion() {
-        if (version == null) {
-            InputStream s = ArcdpsDownloaderGW2.class.getResourceAsStream("/version.txt");
-            InputStreamReader reader = new InputStreamReader(s);
-            StringBuilder data = new StringBuilder();
-            try {
-                int length = -1;
-                char[] cbuf = new char[20];
-                while ((length = reader.read(cbuf)) != -1) {
-                    data.append(cbuf, 0, length);
-                }
-                reader.close();
-            } catch (IOException e) {
-            }
-            if (data.length() == 0) {
-                return "undefined";
-            } else {
-                version = data.toString();
-            }
-        }
-        return version;
     }
 
 }

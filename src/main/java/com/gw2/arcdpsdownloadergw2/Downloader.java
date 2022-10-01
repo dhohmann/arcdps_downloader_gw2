@@ -5,6 +5,7 @@
 package com.gw2.arcdpsdownloadergw2;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -34,16 +35,10 @@ public class Downloader {
     public Downloader() {
         try {
             this.url = new URL("https://www.deltaconnected.com/arcdps/x64/d3d11.dll");
-            switch (ArcdpsDownloaderGW2.getConfig().getDirectXVersion()) {
-                case 9:
-                    this.filePath = "C:/Program Files/Guild Wars 2/bin64/d3d9.dll";
-                    break;
-                default:
-                    this.filePath = "C:/Program Files/Guild Wars 2/d3d11.dll";
-                    break;
-            }
+            this.filePath = Utils.getArcDPSLocation(ArcdpsDownloaderGW2.getConfig().getDirectXVersion())
+                    .getAbsolutePath();
 
-        } catch (MalformedURLException ex) {
+        } catch (MalformedURLException | FileNotFoundException ex) {
             Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -70,7 +65,7 @@ public class Downloader {
     public Date getLastModification() {
         try {
             StringBuilder output = new StringBuilder();
-            URL url =  new URL("https://www.deltaconnected.com/arcdps/x64/");
+            URL url = new URL("https://www.deltaconnected.com/arcdps/x64/");
             InputStreamReader reader = new InputStreamReader(url.openStream());
             char[] buffer = new char[256];
             int length = -1;
