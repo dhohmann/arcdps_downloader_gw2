@@ -49,7 +49,7 @@ public class Configuration {
         Properties defaults = loadDefaults();
 
         File configurationFile = getConfigFile();
-        Properties properties = new Properties(defaults);
+        Properties properties = new Properties();
         if (configurationFile.exists()) {
             try {
                 InputStream input = new FileInputStream(configurationFile);
@@ -57,6 +57,11 @@ public class Configuration {
                 input.close();
             } catch (IOException ex) {
                 System.out.println("Could not load configuration file: " + ex.getMessage());
+            }
+        }
+        for (Object e : defaults.keySet()) {
+            if(!properties.contains(e.toString())){
+                properties.setProperty(e.toString(), defaults.getProperty(e.toString()));
             }
         }
         return properties;
@@ -81,6 +86,7 @@ public class Configuration {
             FileOutputStream out = new FileOutputStream(getConfigFile());
             properties.store(out, "");
             out.close();
+            System.out.println("Configuration saved");
         } catch (IOException ex) {
             System.out.println("Could not save configuration: " + ex.getMessage());
         }
