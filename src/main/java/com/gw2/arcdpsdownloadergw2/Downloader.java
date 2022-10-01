@@ -70,6 +70,7 @@ public class Downloader {
     public Date getLastModification() {
         try {
             StringBuilder output = new StringBuilder();
+            URL url =  new URL("https://www.deltaconnected.com/arcdps/x64/");
             InputStreamReader reader = new InputStreamReader(url.openStream());
             char[] buffer = new char[256];
             int length = -1;
@@ -113,5 +114,9 @@ public class Downloader {
             return false;
         }
         return currentVersion.before(updateVersion);
+    }
+
+    public static void main(String[] args) {
+        new Downloader().checkUpdateAvailable();
     }
 }

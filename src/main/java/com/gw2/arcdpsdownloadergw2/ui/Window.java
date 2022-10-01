@@ -132,4 +132,8 @@ public class Window {
         action.execute();
     }
 
+
+    public static void main(String[] args) {
+        new Window().show();
+    }
 }

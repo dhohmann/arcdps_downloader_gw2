@@ -9,19 +9,23 @@ public class Download implements Action {
 
     @Override
     public void execute() {
-        Downloader downloader = new Downloader();
-        System.out.println("Checking for updates...");
-        if(downloader.checkUpdateAvailable()){
-            System.out.println("Update found.");
-            if(downloader.downloadFile()){
-                System.out.println("Download successful.");
+        try {
+            Downloader downloader = new Downloader();
+            System.out.println("Checking for updates...");
+            if (downloader.checkUpdateAvailable()) {
+                System.out.println("Update found.");
+                if (downloader.downloadFile()) {
+                    System.out.println("Download successful.");
+                } else {
+                    System.out.println("Download failed.");
+                }
             } else {
-                System.out.println("Download failed.");
+                System.out.println("No update.");
             }
-        } else {
-            System.out.println("No update.");
+        } catch (Throwable e) {
+            System.out.println("Error during download" + e.getMessage());
         }
 
     }
-    
+
 }
