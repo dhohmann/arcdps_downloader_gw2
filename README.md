@@ -1,18 +1,26 @@
 # arcdps_downloader_gw2
 Small Java program to download latest Arcdps to Guild Wars 2
 
-
 ## Requirements
 Java 8+
+Guild Wars 2
 
-## Usage
-Download the file and use it to start the game.
+## Changelog
+More information [here](Changelog.md)
+
+# Installation
+1. Install Java if not already installed. [https://www.java.com/](https://www.java.com/)
+2. Download the JAR-File into a folder of your choice
+3. Double-click the JAR. If needed, select Java to open the file with.
+
+# Usage
+1. Double-click the JAR.
 1. The program will check the installed ArcDPS version and checks for updates.
-2. When new updates are found, a new version will be downloaded.
-3. The program will start the game afterwards.
+4. When new updates are found, a new version will be downloaded.
+5. The program will start the game afterwards.
 
-## Configuration
-The configuration is located under your user directory in the folder ```arcdpsdownloadergw2```
+# Configuration
+The configuration is located in the same folder.
 
 ### directx.version
 Change according to the direct x version used by the game. (See under Settings > UI. Is the legacy support enabled -> DirectX9)
