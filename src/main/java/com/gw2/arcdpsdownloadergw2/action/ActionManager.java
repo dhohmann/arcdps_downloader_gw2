@@ -14,7 +14,7 @@ public class ActionManager {
             Class<?> clazz;
             Action action;
             try {
-                clazz = Class.forName(getClass().getPackageName() + ".impl." + a);
+                clazz = Class.forName(getClass().getPackage().getName() + ".impl." + a);
             } catch (ClassNotFoundException e) {
                 clazz = null;
             }
