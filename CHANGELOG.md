@@ -1,4 +1,8 @@
 ## Changelog
+
+## v1.1.1
+- Fixed a bug with Java 8
+
 ### v1.1
 - Updated action handling.
 - Added UI with settings and different actions
