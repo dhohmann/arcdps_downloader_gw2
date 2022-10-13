@@ -1,5 +1,10 @@
 package com.gw2.arcdpsdownloadergw2.action;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import com.gw2.arcdpsdownloadergw2.Utils;
+
 public class ActionManager {
 
     /**
@@ -39,6 +44,19 @@ public class ActionManager {
             }
         }
         return true;
+    }
+
+    public Set<String> getActions() {
+        Set<String> result = new HashSet<>();
+        Set<Class<?>> clazzes = Utils.PackageUtils
+                .findAllClassesUsingClassLoader(getClass().getPackage().getName() + ".impl");
+
+        for (Class<?> c : clazzes) {
+            if(Action.class.isAssignableFrom(c)){
+                result.add(c.getSimpleName());
+            }
+        }
+        return result;
     }
 
 }
