@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -32,6 +33,15 @@ public class Downloader {
     private URL url;
     private String filePath;
 
+    private InputStream getStream(URL url) throws IOException {
+        URLConnection urlConnection = url.openConnection();
+        urlConnection.addRequestProperty("User-Agent", "java");
+        urlConnection.setReadTimeout(5000);
+        urlConnection.setConnectTimeout(5000);
+        urlConnection.connect();
+        return urlConnection.getInputStream();
+    }
+
     public Downloader() {
         try {
             this.url = new URL("https://www.deltaconnected.com/arcdps/x64/d3d11.dll");
@@ -48,7 +58,7 @@ public class Downloader {
             System.out.println(String.format("Using DirectX%d version. If needed, change it in configuration.",
                     ArcdpsDownloaderGW2.getConfig().getDirectXVersion()));
 
-            InputStream inputStream = this.url.openStream();
+            InputStream inputStream = getStream(this.url);
             Files.copy(inputStream, Paths.get(this.filePath), StandardCopyOption.REPLACE_EXISTING);
             return true;
         } catch (IOException ex) {
@@ -66,7 +76,8 @@ public class Downloader {
         try {
             StringBuilder output = new StringBuilder();
             URL url = new URL("https://www.deltaconnected.com/arcdps/x64/");
-            InputStreamReader reader = new InputStreamReader(url.openStream());
+
+            InputStreamReader reader = new InputStreamReader(getStream(url));
             char[] buffer = new char[256];
             int length = -1;
             while ((length = reader.read(buffer)) > 0) {
@@ -76,13 +87,12 @@ public class Downloader {
             int i = output.indexOf("<a href=\"d3d11.dll\">d3d11.dll</a>");
             i = output.indexOf("indexcollastmod\">", i) + 17;
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            return format.parse(output.substring(i, output.indexOf("</td>", i)));
+            String p = output.substring(i, output.indexOf("</td>", i));
+            return format.parse(p);
         } catch (IOException ex) {
-            Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, "Could not retrieve last modification date",
-                    ex);
+            System.out.println("Could not retrieve last modification date: " + ex.getMessage());
         } catch (ParseException ex) {
-            Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, "Could not parse last modification date",
-                    ex);
+            System.out.println("Could not parse last modification date: " + ex.getMessage());
         }
         return null;
     }
@@ -106,12 +116,13 @@ public class Downloader {
         }
         Date updateVersion = getLastModification();
         if (updateVersion == null) {
+            System.out.println("sdgsdgdsdgsdgsgd");
             return false;
         }
         return currentVersion.before(updateVersion);
     }
 
     public static void main(String[] args) {
-        new Downloader().checkUpdateAvailable();
+        System.out.println(new Downloader().checkUpdateAvailable());
     }
 }

@@ -1,5 +1,6 @@
 # arcdps_downloader_gw2
 Small Java program to download latest Arcdps to Guild Wars 2
+Fork of [jani-e/arcdps_downloader_gw2](https://github.com/jani-e/arcdps_downloader_gw2)
 
 ## Requirements
 Java 8+

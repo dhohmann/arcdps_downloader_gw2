@@ -3,8 +3,10 @@ package com.gw2.arcdpsdownloadergw2.ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.io.PrintStream;
 
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -28,6 +30,7 @@ public class Window {
 
     public Window() {
         frame = new JFrame("ArcDPSDownloader GW2");
+        frame.setIconImage(new ImageIcon(getClass().getResource("/assets/download.png")).getImage());
         frame.setLayout(new BorderLayout());
         frame.setMinimumSize(new Dimension(500, 400));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -127,14 +130,5 @@ public class Window {
 
     private void performAction(String action) {
         ArcdpsDownloaderGW2.getActionManager().execute(action);
-    }
-
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        new Window().show();
     }
 }
