@@ -3,7 +3,6 @@ package com.gw2.arcdpsdownloadergw2.ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Image;
 import java.io.PrintStream;
 
 import javax.swing.ImageIcon;
@@ -14,7 +13,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
-import javax.swing.UIManager;
 
 import com.gw2.arcdpsdownloadergw2.ArcdpsDownloaderGW2;
 import com.gw2.arcdpsdownloadergw2.Utils;
@@ -103,6 +101,7 @@ public class Window {
     public void showAbout() {
         if (aboutDialog == null) {
             aboutDialog = new About(frame, true);
+            aboutDialog.setLocationRelativeTo(frame);
         }
         aboutDialog.setVisible(true);
     }

@@ -19,6 +19,7 @@ public class ArcdpsDownloaderGW2 {
 
     private static Configuration configuration = new Configuration();
     private static ActionManager actionManager = new ActionManager();
+    private static Window window = new Window();
 
     /**
      * Retrieves the configuration of the program.
@@ -38,15 +39,20 @@ public class ArcdpsDownloaderGW2 {
         return actionManager;
     }
 
+    /**
+     * @return the window
+     */
+    public static Window getWindow() {
+        return window;
+    }
+
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        Window window = new Window();
         window.show();
-
     }
 
 }
