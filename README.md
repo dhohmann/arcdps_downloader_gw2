@@ -9,8 +9,18 @@ Guild Wars 2
 ## Changelog
 More information [here](CHANGELOG.md)
 
+# Installation
+Depending on your system, you may already have Java installed. If not, proceed with 
+
+## Download the files
+Check the latest [release](https://github.com/dhohmann/arcdps_downloader_gw2/releases/) and download the file needed for your system.
+
+- When you already have Java installed, you only need the .exe or the .jar file. See [here](#running-with-java-installed) for more information.
+- When you do not have Java installed, you need the .zip file. See [here](#running-without-java-installed) for more information.
+
 ## Running with Java installed
-When you already have Java installed on your system, you can download the JAR file and start the program by double-clicking the JAR.
+1. Download the .exe or .jar file
+2. Double click the file
 
 ## Running without Java installed
 The ZIP file contains a Java runtime so that you do not need to install an additional program.
